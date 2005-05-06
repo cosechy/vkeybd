@@ -1,0 +1,4 @@
+version=2
+
+# Pattern					Version
+http://www.alsa-project.org/~iwai/alsa.html	vkeybd-(.*)\.tar\.gz	debian	uupdate

@@ -1,0 +1,13 @@
+vkeybd (1:0.1.17-1) unstable; urgency=low
+
+  * Initial upload (closes: #193256)
+    [ Note: this package belongs to source package awe in woody and it has
+      been remove from sid in 2002. Beside vkeybd the awe source package in woody
+      provides also packages holding kernel drivers for Sound Blaster AWE32. After
+      these drivers have been included in the Linux kernel the upstream splitted
+      the code and changed the versioning of vkeybd, thus I'm using epoch ]
+  * Upload sposored by Marco Presi
+  * Menu icon (closes: #299396)
+
+ -- Free Ekanayaka <free@agnula.org>  Fri,  6 May 2005 10:50:48 +0200
+

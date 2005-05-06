@@ -1,0 +1,6 @@
+?package(vkeybd):needs="x11" \
+	title="MIDI Virtual Keyboard" \
+	section="Apps/Sound" \
+        icon="/usr/share/pixmaps/vkeybd.xpm" \
+	longtitle="MIDI based Virtual Keyboard program" \
+	command="/usr/bin/vkeybd"
