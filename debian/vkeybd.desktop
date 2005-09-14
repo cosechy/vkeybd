@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Name=VKeyBd
+GenericName=MIDI Virtual Keyboard
+Comment=MIDI Virtual Keyboard
+Icon=/usr/share/icons/vkeybd.xpm
+
+Type=Application
+Categories=Application;AudioVideo;Audio;
+
+Exec=vkeybd
+Terminal=false

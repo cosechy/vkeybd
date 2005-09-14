@@ -3,12 +3,13 @@ Section: sound
 Priority: optional
 Maintainer: Free Ekanayaka <free@agnula.org>
 Build-Depends: dpatch, docbook-to-man, debhelper (>> 3.0.0), tcl8.4-dev, tk8.4-dev, xlibs-dev, libasound2-dev
-Standards-Version: 3.6.1.1
+Standards-Version: 3.6.2
 
 Package: vkeybd
 Architecture: any
 Depends: ${shlibs:Depends}
-Description: Virtual Keyboard program
+Description: Virtual MIDI Keyboard
  This program allows you to use the Linux AWE32 driver, OSS MIDI sequencer,
  or ALSA MIDI sequencer and provides "virtual" keyboard (the musical type),
  which can be "played" using the keyboard or mouse under X11.
+

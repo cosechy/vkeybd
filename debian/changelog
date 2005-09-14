@@ -1,3 +1,11 @@
+vkeybd (1:0.1.17-2) unstable; urgency=low
+
+  * Better description (closes: #310506), thanks to
+    browaeys.alban@wanadoo.fr
+  * Added desktop file
+
+ -- Free Ekanayaka <free@agnula.org>  Wed, 14 Sep 2005 10:13:50 +0100
+
 vkeybd (1:0.1.17-1) unstable; urgency=low
 
   * Initial upload (closes: #193256)
