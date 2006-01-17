@@ -2,7 +2,7 @@ Source: vkeybd
 Section: sound
 Priority: optional
 Maintainer: Free Ekanayaka <free@agnula.org>
-Build-Depends: dpatch, docbook-to-man, debhelper (>> 3.0.0), tcl8.4-dev, tk8.4-dev, xlibs-dev, libasound2-dev
+Build-Depends: dpatch, docbook-to-man, debhelper (>> 4.0.0), tcl8.4-dev, tk8.4-dev, libasound2-dev
 Standards-Version: 3.6.2
 
 Package: vkeybd

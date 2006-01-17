@@ -1,3 +1,10 @@
+vkeybd (1:0.1.17-3) unstable; urgency=low
+
+  * Removed unnecessary build-depends on xlibs-dev (Closes: #346976)
+  * Added compat file and removed DH_COMPAT from debian/rules
+
+ -- Free Ekanayaka <free@agnula.org>  Tue, 17 Jan 2006 07:35:17 +0100
+
 vkeybd (1:0.1.17-2) unstable; urgency=low
 
   * Better description (closes: #310506), thanks to
