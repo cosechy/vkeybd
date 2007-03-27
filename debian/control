@@ -1,9 +1,10 @@
 Source: vkeybd
 Section: sound
 Priority: optional
-Maintainer: Free Ekanayaka <free@agnula.org>
+Maintainer: Debian Multimedia Team <debian-multimedia@lists.debian.org>
+Uploaders: Free Ekanayaka <freee@debian.org>
 Build-Depends: dpatch, docbook-to-man, debhelper (>> 4.0.0), tcl8.4-dev, tk8.4-dev, libasound2-dev
-Standards-Version: 3.6.2
+Standards-Version: 3.7.2
 
 Package: vkeybd
 Architecture: any
