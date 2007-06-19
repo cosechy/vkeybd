@@ -1,3 +1,10 @@
+vkeybd (1:0.1.17a-2) unstable; urgency=low
+
+  * Changed name in .desktop file to Virtual MIDI Keyboard
+  * Fixed watch file
+
+ -- Free Ekanayaka <freee@debian.org>  Wed, 20 Jun 2007 01:56:13 +0200
+
 vkeybd (1:0.1.17a-1) unstable; urgency=low
 
   * New upstream release

@@ -1,8 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 
-Name=VKeyBd
-GenericName=MIDI Virtual Keyboard
+Name=Virtual MIDI Keyboard
 Comment=MIDI Virtual Keyboard
 Icon=/usr/share/icons/vkeybd.xpm
 
