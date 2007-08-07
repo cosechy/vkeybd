@@ -3,7 +3,7 @@
 # copyright (c) 1997-2000 by Takashi Iwai
 #
 
-VERSION = 0.1.16
+VERSION = 0.1.17b
 
 #
 # installation directory
@@ -84,7 +84,8 @@ endif
 
 VKB_TCLFILE = $(VKBLIB_DIR)/vkeybd.tcl
 
-CFLAGS = -Wall -O -DVKB_TCLFILE=\"$(VKB_TCLFILE)\" \
+COPTFLAGS = -Wall -O
+CFLAGS = $(COPTFLAGS) -DVKB_TCLFILE=\"$(VKB_TCLFILE)\" \
 	-DVKBLIB_DIR=\"$(VKBLIB_DIR)\"\
 	-DVERSION_STR=\"$(VERSION)\"\
 	$(DEVICES) $(XINC) $(TCLINC) $(TKINC) $(LADCCACFLAGS)

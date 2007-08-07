@@ -1,3 +1,9 @@
+vkeybd (1:0.1.17b-1) unstable; urgency=low
+
+  * New upstream release (Closes: #436330)
+
+ -- Free Ekanayaka <freee@debian.org>  Tue,  7 Aug 2007 13:57:00 +0200
+
 vkeybd (1:0.1.17a-2) unstable; urgency=low
 
   * Changed name in .desktop file to Virtual MIDI Keyboard
