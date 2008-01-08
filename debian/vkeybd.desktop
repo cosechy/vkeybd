@@ -1,12 +1,11 @@
 [Desktop Entry]
-Encoding=UTF-8
 
 Name=Virtual MIDI Keyboard
 Comment=MIDI Virtual Keyboard
-Icon=/usr/share/icons/vkeybd.xpm
+Icon=vkeybd
 
 Type=Application
-Categories=Application;AudioVideo;Audio;
+Categories=AudioVideo;Audio;
 
 Exec=vkeybd
 Terminal=false
