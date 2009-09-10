@@ -1,3 +1,10 @@
+vkeybd (1:0.1.18d-1) unstable; urgency=low
+
+  * New upstream version, thanks to Jean-Michel Philippe (Closes: #527942, #527943)
+  * Fix broken watch file, thanks to Arnout Engelen (Closes: #543680)
+
+ -- Free Ekanayaka <freee@debian.org>  Thu, 10 Sep 2009 23:04:59 +0200
+
 vkeybd (1:0.1.17b-2) unstable; urgency=low
 
   * debian/vkeybd.desktop:

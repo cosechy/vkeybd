@@ -1,4 +1,4 @@
 version=2
 
 # Pattern					Version
-http://www.alsa-project.org/~iwai/alsa.html	vkeybd-(.*)\.tar\.bz2 debian	uupdate
+ftp://ftp.suse.com/pub/people/tiwai/vkeybd/	vkeybd-(.*)\.tar\.bz2 debian	uupdate
