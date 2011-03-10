@@ -1,13 +1,10 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## vkeybd_xpm_fix.dpatch by Marco Presi (Zufus) <zufus@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+vkeybd_xpm_fix.dpatch by Marco Presi (Zufus) <zufus@debian.org>
+---
+ vkeybd.xpm |  294 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 294 insertions(+)
 
-@DPATCH@
-diff -urNad vkeybd-0.1.17/vkeybd.xpm /tmp/dpep.ufyHue/vkeybd-0.1.17/vkeybd.xpm
---- vkeybd-0.1.17.old/vkeybd.xpm	1970-01-01 01:00:00.000000000 +0100
-+++ vkeybd-0.1.17.new/vkeybd.xpm	2005-05-10 00:10:52.000000000 +0200
+--- /dev/null
++++ vkeybd/vkeybd.xpm
 @@ -0,0 +1,294 @@
 +/* XPM */
 +static char *vkeybd[] = {

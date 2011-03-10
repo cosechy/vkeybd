@@ -1,0 +1,13 @@
+vkeybd_tcl_permissions_fix.dpatch by Marco Presi (Zufus) <zufus@debian.org>
+---
+ vkeybd.tcl |    2 --
+ 1 file changed, 2 deletions(-)
+
+--- vkeybd.orig/vkeybd.tcl
++++ vkeybd/vkeybd.tcl
+@@ -1,5 +1,3 @@
+-#!/bin/tcl
+-#
+ # Virtual Tiny Keyboard
+ #
+ # Copyright (c) 1997-2007 by Takashi Iwai
