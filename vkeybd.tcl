@@ -1,4 +1,4 @@
-#!/bin/tcl
+#!/usr/bin/wish -f
 #
 # Virtual Tiny Keyboard
 #
