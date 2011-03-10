@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 DESTDIR=$(CURDIR)/debian/vkeybd
+LDFLAGS+=-Wl,--as-needed
 
 %:
 	dh $@ -Smakefile
