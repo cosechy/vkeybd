@@ -7,7 +7,7 @@ DESTDIR=$(CURDIR)/debian/vkeybd
 
 override_dh_auto_build:
 	dh_auto_build
-	docbook-to-man debian/vkeybd.sgml > vkeybd.1
+	cp vkeybd.man vkeybd.1
 	docbook-to-man debian/sftovkb.sgml > sftovkb.1
 
 override_dh_auto_install:
