@@ -6,7 +6,6 @@ Uploaders: Free Ekanayaka <freee@debian.org>
 Build-Depends: debhelper (>> 4.0.0),
  docbook-to-man,
  debhelper (>> 4.0.0),
- dpatch,
  libasound2-dev,
  tcl8.4-dev,
  tk8.4-dev
