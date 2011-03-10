@@ -1,7 +1,7 @@
 Source: vkeybd
 Section: sound
 Priority: optional
-Maintainer: Debian Multimedia Team <debian-multimedia@lists.debian.org>
+Maintainer: Debian Multimedia Maintainers <pkg-multimedia-maintainers@lists.alioth.debian.org>
 Uploaders: Free Ekanayaka <freee@debian.org>
 Build-Depends: dpatch, docbook-to-man, debhelper (>> 4.0.0), tcl8.4-dev, tk8.4-dev, libasound2-dev
 Standards-Version: 3.7.2
