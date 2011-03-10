@@ -14,7 +14,8 @@ Standards-Version: 3.9.1
 
 Package: vkeybd
 Architecture: any
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends},
+ ${misc:Depends}
 Description: Virtual MIDI Keyboard
  This program allows you to use the Linux AWE32 driver, OSS MIDI sequencer,
  or ALSA MIDI sequencer and provides "virtual" keyboard (the musical type),
