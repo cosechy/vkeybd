@@ -1,12 +1,12 @@
 This package was debianized by Free Ekanayaka <free@centrotemporeale.it> on
 Thu,  5 Jun 2003 15:24:12 +0200.
 
-It was downloaded from http: http://mitglied.lycos.de/iwai/alsa.html
+It was downloaded from: ftp://ftp.suse.com/pub/people/tiwai/vkeybd/
 
 
 Upstream Author: Takashi Iwai <tiwai@suse.de>
 
-Copyright (C) 1996 Takashi Iwai
+Copyright (C) 1996-2000 Takashi Iwai
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -19,4 +19,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 On Debian GNU/Linux systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL'.
+Public License can be found in `/usr/share/common-licenses/GPL-2'.
