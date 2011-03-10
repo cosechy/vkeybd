@@ -8,7 +8,7 @@ VERSION = 0.1.18d
 #
 # installation directory
 #
-PREFIX = /usr
+PREFIX = /usr/local
 # binary and Tcl script are put there
 BIN_DIR = $(PREFIX)/bin
 # man page
@@ -37,7 +37,7 @@ USE_LASH = 0
 #
 TCL_VERSION = 8.4
 TCLLIB = -ltcl$(TCL_VERSION)
-TCLINC = -I/usr/include/tcl8.4
+TCLINC =
 TKLIB = -ltk$(TCL_VERSION)
 TKINC =
 XLIB = -L/usr/X11R6/lib -lX11
