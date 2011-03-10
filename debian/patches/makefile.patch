@@ -3,8 +3,8 @@ Description: Set PREFIX to /usr.
 Origin: Debian
 Forwarded: not-needed
 ---
- Makefile |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 --- vkeybd.orig/Makefile
 +++ vkeybd/Makefile
@@ -17,12 +17,15 @@ Forwarded: not-needed
  # binary and Tcl script are put there
  BIN_DIR = $(PREFIX)/bin
  # man page
-@@ -37,7 +37,7 @@ USE_LASH = 0
+@@ -35,9 +35,9 @@ USE_LASH = 0
  #
- TCL_VERSION = 8.4
+ # Tcl/Tk library -- depends on your distribution
+ #
+-TCL_VERSION = 8.4
++TCL_VERSION = 8.5
  TCLLIB = -ltcl$(TCL_VERSION)
 -TCLINC =
-+TCLINC = -I/usr/include/tcl8.4
++TCLINC = -I/usr/include/tcl8.5
  TKLIB = -ltk$(TCL_VERSION)
  TKINC =
  XLIB = -L/usr/X11R6/lib -lX11

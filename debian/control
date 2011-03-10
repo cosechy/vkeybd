@@ -6,8 +6,8 @@ Uploaders: Free Ekanayaka <freee@debian.org>
 Build-Depends: debhelper (>= 7.0.50~),
  docbook-to-man,
  libasound2-dev,
- tcl8.4-dev,
- tk8.4-dev
+ tcl8.5-dev,
+ tk8.5-dev
 Vcs-Git: git://git.debian.org/pkg-multimedia/vkeybd.git
 Vcs-Browser: http://git.debian.org/?p=pkg-multimedia/vkeybd.git
 Standards-Version: 3.9.1
