@@ -1,0 +1,35 @@
+2004-08-31	ver.0.1.17
+	* bind left and right keys to shift keybase.
+	* removed 'q' key binding, added ctrl-q instead.
+	* save keymap file separately in ~/.vkeybdmap.
+	  default file is load from /usr/share/vkeybd/vkeybdmap.
+	* save octave value to the config file.
+
+2004-03-03	ver.0.1.16
+	* added desktop file and icon png files (courtesy of Ivo Clarysse).
+	* fixed fskip.c.
+	
+2003-11-20	ver.0.1.15
+	* fixed the compilation with ALSA 1.0.0.
+	* fix for ladcca-0.4.0 by Jacob Meuser.
+2003-08-19	ver.0.1.14
+	* added the support of standard "--x=y" style options.
+	* send program change immediately in ALSA mode.
+	* added --laddca option.  set "no" as default.
+	
+2003-07-03	ver.0.1.13a
+	* fixed for new LADCCA API
+	* removed debug messages
+	
+2003-01-23	ver.0.1.13
+	* fixed compile warnings (with the recent tcl/tk)
+	* LADCCA support
+	* README clean up
+	* added vkeybdrc_german example by Matthias Nagorni
+	
+2002-07-25	ver.0.1.12
+	* don't override default key-bindings if defined
+	* fixed for the newer tcl/tk
+	
+2002-02-22	ver.0.1.11a
+	* fixed mouse motion on black keys

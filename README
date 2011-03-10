@@ -1,0 +1,276 @@
+====================================================================
+		VIRTUAL KEYBOARD ver.0.1.17
+		Takashi Iwai  <tiwai@suse.de>
+====================================================================
+
+GENERAL NOTES
+-------------
+
+This is a virtual keyboard for AWE, MIDI and ALSA drivers.
+It's a simple fake of a MIDI keyboard on X-windows system.
+Enjoy a music with your mouse and "computer" keyboard :-)
+
+The program requires Tcl7.5/Tk4.1 or newer libraries.
+This program supports:
+  - ALSA sequencer (ver.0.5.x or 0.9.x)
+  - AWE driver on OSS  (ver.0.4.3)
+  - MIDI device on OSS and ALSA
+Since the most of the part is written by Tcl/Tk script, it'll be not
+so difficult to apply this program to other systems.
+
+
+INSTALLATION
+------------
+
+1. Edit Makefile
+
+You may need to modify Makefile for your system.
+The following values can be configurable:
+
+  - PREFIX
+      Destination directory prefix (e.g. /usr/local)
+  - BIN_DIR
+      Destination directory where the program will be installed.
+  - VKLIB_DIR
+      Directory where vkeybd Tcl file, key list and preset list files
+      are stored.
+  - MAN_DIR
+      Man page prefix directory (e.g. /usr/local/man)
+  - MAN_SUFFIX
+      Man page prefix
+
+  - USE_ALSA
+  - USE_AWE
+  - USE_MIDI
+      Device selection.  Multiple devices are available.
+      To disable a device, set the value 0.  Do not undefine it.
+      At least one of them must have non-zero value.
+
+  - USE_LADCCA
+      Supports LADCCA (http://pkl.net/~node/software/)
+      Set 1 to add the this support.
+
+  - TCLLIB
+      Tcl library for linking, given as "-lxxx"
+  - TCLINC
+      Tcl include path option for cc, given as "-Ixxx"
+  - TKLIB, XLIB
+      Tk and X libraries (-lxxx)
+  - TKINC, XINC
+      Tk and X include path option (-Ixxx)
+  - EXTRALIB
+      Other required library (-lxxx)
+      
+2. Run make.
+
+3. Install via "make install".
+
+
+USAGE
+-----
+
+Load the soundfont via sfxload utility before using this program.
+Then, just start vkeybd.  The following command line options are
+accpted.
+
+Common Options:
+  --device mode
+	Use the specified mode for output device.
+	The argument are "awe", "midi" or "alsa", for AWE/OSS,
+	MIDI/OSS and ALSA devices, respectively.
+	Default is alsa.
+  --config file
+	Use the specified file as config file (see below)
+  --preset file
+	Use the specified file as preset list file (see below)
+  --channel num
+	Specify the channel to be played for normal instruments.
+	Valid only for MIDI and ALSA devices. Default is 0.
+  --drum num
+	Specify the channel to be played for drum instruments.
+	Valid only for MIDI and ALSA devices. Default is 9.
+  --octave num
+	Specify the number of octaves to display keys.
+	Default is 3.
+
+ALSA Device Option:
+  --addr client:port or 's'
+	Set ALSA client and port numbers to be connected.
+	If argument begins with 's', the port is opened as subscription
+	port, and events are sent to all subscribers.  Otherwise,
+	vkeybd connects directly to the specified port.
+	Default is 's'.
+  --name string
+	Specify the name of client/port.  Some applications like
+	tk707 check the client/port name whether it is a valid MIDI
+	device port.  This options makes vkeybd possible to "fake"
+	as a real MIDI device.
+  --ladcca bool
+	Specify the support of LADCCA.  Give yes or no as the
+	argument.  The default value is no.
+
+OSS Sequencer Device Option:
+  --seqdev file
+	Specify the device file path for sequencer access.
+	As default /dev/sequencer is used.
+  --seqidx num
+	Specify the synth device index for AWE32/64 WaveTable.
+	If negative value is given, the device is auto-probed.
+	Default value is -1.
+
+MIDI Device Option:
+  --mididev file
+	Speicfy the file path of MIDI device.
+	Default value is /dev/midi.
+
+
+FILE MENU
+---------
+
+"Connection" shows whether the vkeybd connects to the device.
+On OSS system, only one application is allowed to access sequencer
+device.  Thus, if one wants to play another program even using another
+device, he needs to disconnect vkeybd once.  On ALSA or OSS emulation
+on ALSA, you don't have to switch vkeybd off, since multiple access is
+allowed.
+
+With "Save Config", the current keymap and view configuration are
+saved on ~/.vkeybdrc config file.  This file will be read at the next
+invoke.
+
+VIEW MENU
+---------
+
+Thie menu shows the check buttons to toggle the display of control
+buttons.
+
+With "Key/Velocity" button, a key and a velocity scale bars are
+shown.  The key scale indicates the lowest note value of the visible
+keyboard (as default 48 = C4).  The velocity scale bar is used to
+change the velocity of each note-on.
+
+With "Control" button, controls for the current channel and for the
+MIDI continous-controls are enabled.  The channel number is increased
+or decreased by clicking the right or left button around the shown
+channel number.  The bank and preset are remembered for each channel.
+You may choose the CC to be adjusted by pull-down menu, which
+indicates "ModWheel" as default.  Then change the parameter value with 
+the scale bar at the right side.
+
+With "Pitch" button, you may adjust pitch wheel.  The pitch goes
+back to the center position when you click the "Pitch Clear" button
+at the left.
+
+With "Program" button, the selection list of playing instrument is
+toggled.  The shown presets are read from preset list file.
+
+KEYBOARD
+--------
+
+Each visible key is mapped on your computer keyboard from 'z' to '\'.
+On the version 0.1.11, the key auto-repeat is filtered so that only
+one note is generated.  Thus you no longer have to turn off auto
+repeat via "xset -r".
+
+The key assignment can be changed by editting the config file
+~/.vkeybdmap.  Once save the current configuration via File/Save Keymap
+menu.  The config file is the Tcl source, and you may change the list
+of keymap as you wish.
+
+The keymap is a list of elements consisting on the key symbol and the
+corresponding note offset.  The key symbol is the X key symbol for
+assigned key, and note offset is the shifted note number from note key
+of beginning of keyboard, which is changed by "Key" scalebar.
+See the next section for details.
+
+CHANGING THE KEYMAP
+-------------------
+
+The step for changing the keymap manually is like this.
+
+1. Save the current configuration by "File / Save Keymap" menu.
+   You'll have ~/.vkeybdmap file.
+
+2. Edit it using your favorite text editor.
+   There is a list of keymap definitions such as
+
+	set keymap {
+	  {a 8}
+	  {z 9}
+	  {s 10}
+	  {x 11}
+	  ....
+
+   The first element of each keymap is the key-symbol of X11.
+   you can get the key-symbol for your computer keyboard by xev:
+
+   2a. Start xev on a terminal.
+
+	% xev
+
+       You'll get a small window.
+
+   2b. Move the cursor pointer into the window.
+       Many X11 events will be displayed in realtime on the terminal.
+       Depending on the window manager, you'll need to click the
+       window to choose focus.
+
+   2c. Push the key you want to use.
+       The key-push/release event will be shown on the terminal like below.
+
+	KeyRelease event, serial 26, synthetic NO, window 0x1600001,
+	    root 0x3f, subw 0x0, time 4352873, (88,98), root:(1185,149),
+	    state 0x0, keycode 49 (keysym 0xff1b, Escape), same_screen YES,
+	    XLookupString gives 1 bytes:  "
+
+       Then you know the key-symbol is "Escape" (see keysym entry).
+
+   The second element of each keymap is the MIDI note offset from the
+   base note.  If the key is set to 48 on the vkeybd and if you have a
+   keymap entry like {Escape 15}, the key 63 (15+48) will be played
+   when you push Escape key.
+
+3. Restart vkeybd.
+
+
+PRESET LIST FILE
+----------------
+
+The preset list file is used to describe the list of MIDI preset
+names.  If the command line option is omitted, the default preset list
+file "~/vkeybd.list", "~/.vkeybd.list" and "$vkblib/vkeybd.list" are
+searched sequentially.  The preset list will appear when "Program"
+toggle button is on, and you can select your favorite sound from the
+list.
+
+The preset list file can be converted from soundfont file via sftovkb
+utility included in this package.  For example,
+	% sftovkb /usr/local/lib/sfbank/synthgm.sbk > vkeybd.list
+The only command line argument is the soundfont file name.  This must
+be a full path name.
+
+
+ACKNOWLEDGMENT
+--------------
+
+The desktop pixmaps are by courtesy of Ivo Clarysse.
+
+
+COPYRIGHT
+---------
+
+Copyright (C) 1997-2000 Takashi Iwai
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
