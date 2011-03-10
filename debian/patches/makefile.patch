@@ -1,3 +1,7 @@
+Description: Set PREFIX to /usr.
+ Properly set TCLINC to build with tcl8.4.
+Origin: Debian
+Forwarded: not-needed
 ---
  Makefile |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
