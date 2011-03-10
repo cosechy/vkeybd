@@ -11,6 +11,7 @@ Build-Depends: debhelper (>= 7.0.50~),
 Vcs-Git: git://git.debian.org/pkg-multimedia/vkeybd.git
 Vcs-Browser: http://git.debian.org/?p=pkg-multimedia/vkeybd.git
 Standards-Version: 3.9.1
+Homepage: http://www.alsa-project.org/~tiwai/alsa.html
 
 Package: vkeybd
 Architecture: any
