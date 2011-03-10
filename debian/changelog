@@ -1,3 +1,36 @@
+vkeybd (1:0.1.18d-2) unstable; urgency=low
+
+  * Team upload.
+  * ACK nmu.
+  * Update maintainer's information:
+    - Correct Maintainer's name and email.
+    - Add Vcs-* tags.
+    - Add gbp config file.
+  * Drop dpatch support.
+  * Switch packaging to 3.0 (quilt) format, refresh all patches.
+  * Add .gitignore file.
+  * Switch to DH 7.
+  * debian/control:
+    - Apply one-dep-per-line style.
+    - Drop ancient debhelper.
+    - Add misc:Depends to Depends field.
+    - Add Homepage field.
+    - Bump Standards.
+  * Update to Tcl/Tk 8.5.
+  * Append -Wl,--as-needed to the linking flags.
+  * Restore all changes directly introduced by Debian's packaging,
+    split them into separate patches.
+  * debian/clean:
+    - Purge auto-generated manpages.
+  * debian/dirs:
+    - Drop empty /usr/sbin directory.
+  * Fix menu file as per Debian Menu sub-policy.
+  * Update debian/copyright.
+  * Install upstream's version of vkeybd.1.
+  * Add patch to fix manpage mistakes.
+
+ -- Alessio Treglia <alessio@debian.org>  Thu, 10 Mar 2011 10:59:51 +0100
+
 vkeybd (1:0.1.18d-1.1) unstable; urgency=low
 
   * Non-maintainer upload.
