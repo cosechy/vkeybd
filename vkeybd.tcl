@@ -2,7 +2,7 @@
 #
 # Virtual Tiny Keyboard
 #
-# Copyright (c) 1997-2000 by Takashi Iwai
+# Copyright (c) 1997-2007 by Takashi Iwai
 #
 # turn off auto-repeat on your X display by "xset -r"
 #
@@ -96,8 +96,13 @@ proc KeybdCreate {w} {
     foreach i $keymap {
 	set key [lindex $i 0]
 	set note [lindex $i 1]
-	bind $w <KeyPress-$key> [list KeyQueue 1 $note 0]
-	bind $w <KeyRelease-$key> [list KeyQueue 0 $note 0]
+	bind . <KeyPress-$key> [list KeyQueue 1 $note 0]
+	bind . <KeyRelease-$key> [list KeyQueue 0 $note 0]
+	set upperkey [string toupper $key]
+	if {[string length $key] == 1 && $upperkey != $key} {
+	    bind . <KeyPress-$upperkey> [list KeyQueue 1 $note 0]
+	    bind . <KeyRelease-$upperkey> [list KeyQueue 0 $note 0]
+	}
     }
 
     #
@@ -172,10 +177,12 @@ set activekey ""
 proc KeyStart {key button} {
     global keybase keywin keyitem keyvel activekey
     SeqOn
-    if {$button == 1} {
-	set activekey $keyitem($key)
+    catch {
+	if {$button == 1} {
+	    set activekey $keyitem($key)
+	}
+	$keywin itemconfigure $keyitem($key) -fill blue
     }
-    $keywin itemconfigure $keyitem($key) -fill blue
     set key [expr $key + $keybase]
     SeqStartNote $key $keyvel
 }
@@ -183,11 +190,13 @@ proc KeyStart {key button} {
 proc KeyStop {key button} {
     global keybase keywin keyitem keyindex keycolor activekey
     SeqOn
-    if {$button == 1 && $activekey != ""} {
-	set key $keyindex($activekey)
-	set activekey ""
+    catch {
+	if {$button == 1 && $activekey != ""} {
+	    set key $keyindex($activekey)
+	    set activekey ""
+	}
+	$keywin itemconfigure $keyitem($key) -fill $keycolor($key)
     }
-    $keywin itemconfigure $keyitem($key) -fill $keycolor($key)
     set key [expr $key + $keybase]
     SeqStopNote $key 0
 }
@@ -646,6 +655,61 @@ proc SearchDefault {fname} {
     return $path
 }
 
+# for keymap; check $LANG for the system-wide configurations
+proc SearchDefaultLang {fname} {
+    global env optvar
+
+    proc CheckDefaultPath {fname lang} {
+	global env optvar
+	if {[info exists env(VKEYBD)]} {
+	    set path "$env(VKEYBD)/$fname$lang"
+	    if {[file readable $path]} {
+		return $path
+	    }
+	}
+	set path "$optvar(libpath)/$fname$lang"
+	if {[file readable $path]} {
+	    return $path
+	}
+	return ""
+    }
+
+    set path "$env(HOME)/$fname"
+    if {[file readable $path]} {
+	return $path
+    }
+    set path "$env(HOME)/.$fname"
+    if {[file readable $path]} {
+	return $path
+    }
+
+    set lang [string trim $env(LANG) .]
+    switch -glob $lang {
+	[a-z][a-z] {set lang "-$lang"}
+	[a-z][a-z]_[A-Z][A-Z]* {set lang [string range "-$lang" 0 5]}
+	default {set lang ""}
+    }
+    set path [CheckDefaultPath $fname $lang]
+    if {$path != ""} {
+	return $path
+    }
+    if {[string match "-*_*" $lang]} {
+	set lang [string range $lang 0 2]
+	set path [CheckDefaultPath $fname $lang]
+	if {$path != ""} {
+	    return $path
+	}
+    }
+    if {$lang != ""} {
+	set path [CheckDefaultPath $fname ""]
+	if {$path != ""} {
+	    return $path
+	}
+    }
+    set path "$optvar(libpath)/$fname"
+    return $path
+}
+
 #
 # parse command line options
 #
@@ -759,7 +823,7 @@ if {! [info exists optvar(libpath)]} {
 
 set optvar(preset) [SearchDefault $defpresetfile]
 set optvar(config) [SearchDefault $defconfig]
-set optvar(keymap) [SearchDefault $defkeymap]
+set optvar(keymap) [SearchDefaultLang $defkeymap]
 set optvar(channel) 0
 
 ParseOptions $argc $argv
@@ -774,7 +838,7 @@ InitPreset
 MenuCreate
 PanelCreate
 
-wm title . "Virtual Keyboard ver.0.1.17"
+wm title . "Virtual Keyboard ver.0.1.18"
 wm iconname . "Virtual Keyboard"
 
 SeqOn preinit
