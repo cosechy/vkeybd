@@ -1,0 +1,295 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ vkeybd (1:0.1.18d-2) unstable; urgency=low
+ .
+   * Team upload.
+   * ACK nmu.
+   * Update maintainer's information:
+     - Correct Maintainer's name and email.
+     - Add Vcs-* tags.
+     - Add gbp config file.
+   * Drop dpatch support.
+   * Switch packaging to 3.0 (quilt) format, refresh all patches.
+   * Add .gitignore file.
+   * Switch to DH 7.
+   * debian/control:
+     - Apply one-dep-per-line style.
+     - Drop ancient debhelper.
+     - Add misc:Depends to Depends field.
+     - Add Homepage field.
+     - Bump Standards.
+   * Update to Tcl/Tk 8.5.
+   * Append -Wl,--as-needed to the linking flags.
+   * Restore all changes directly introduced by Debian's packaging,
+     split them into separate patches.
+   * debian/clean:
+     - Purge auto-generated manpages.
+   * debian/dirs:
+     - Drop empty /usr/sbin directory.
+   * Fix menu file as per Debian Menu sub-policy.
+   * Update debian/copyright.
+   * Install upstream's version of vkeybd.1.
+   * Add patch to fix manpage mistakes.
+Author: Alessio Treglia <alessio@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+Index: vkeybd/vkeybd.tcl
+===================================================================
+--- vkeybd.orig/vkeybd.tcl	2014-04-25 00:48:09.796101223 +0800
++++ vkeybd/vkeybd.tcl	2014-04-25 00:48:09.788101223 +0800
+@@ -28,6 +28,19 @@
+ #----------------------------------------------------------------
+ # create virtual keyboard
+ 
++# added by yh
++# input port, source:port, color name
++array set colors {
++	{0 *} {"#0000ff" 0}
++	{1 *} {"#00ff00" 0.5}
++	{2 *} {"#ff0000" 0.5}
++	{3 *} {"#0000ff" 0.5}
++	{4 *} {"#ffff00" 0.41}
++	{5 *} {"#ff00ff" 0.41}
++	{6 *} {"#00ffff" 0.41}
++}
++set totalports 3
++
+ proc CheckKeymap {target} {
+     global keymap keywin
+     foreach i $keymap {
+@@ -73,7 +86,7 @@
+ 	    set y2 $keyhgt
+ 	    set id [$w create rectangle $x1 $y1 $x2 $y2 -width 1\
+ 		    -fill white -outline black -tags ebony]
+-	    set keycolor($i) white
++	    set keycolor($i) "#ffffff"
+ 	} else {
+ 	    set x1 [expr ($octave + $j / 2) * $keywid + $keywid * 6/10]
+ 	    set x2 [expr $x1 + $keywid * 8/10 - 1]
+@@ -81,7 +94,7 @@
+ 	    set y2 [expr $keyhgt * 6 / 10]
+ 	    set id [$w create rectangle $x1 $y1 $x2 $y2 -width 1\
+ 		    -fill black -outline white -tags ivory]
+-	    set keycolor($i) black
++	    set keycolor($i) "#000000"
+ 	}
+ 	set keyitem($i) $id
+ 	set keyindex($id) $i
+@@ -810,6 +823,39 @@
+     }
+ }
+ 
++#added by yh
++proc yhInitPorts {} {
++	global totalports
++	for {set i 1} {$i < $totalports} {incr i} {yhSeqNewPort}
++}
++
++proc yhEventCallback {port srcclient srcport note velocity} {
++	global keybase keywin keyitem colors optvar keycolor
++	set key [expr $note - $keybase]
++	if {$key >=0 && $key < $optvar(octave)*12} {
++		if {$velocity == 0} {
++			$keywin itemconfigure $keyitem($key) -fill $keycolor($key)
++		} {
++			if {[array names colors -exact "$port $srcclient:$srcport"] != ""} {
++				set color $colors($port $srcclient:$srcport)
++			} elseif {[array names colors -exact "$port *"] != ""} {
++				set color $colors($port *)
++			} {
++				set color {"#0000ff" 0}
++			}
++			set result 0
++			set opacity [expr {pow($velocity/127.0,[lindex $color 1])}]
++			set color [lindex $color 0]
++			foreach {i j} {1 2 3 4 5 6} {
++				set fg 0x[string range $color $i $j]
++				set bg 0x[string range $keycolor($key) $i $j]
++				set result [expr {$result*256+int($opacity*$fg+(1-$opacity)*$bg)}]
++			}
++			$keywin itemconfigure $keyitem($key) -fill [format "#%06x" $result]
++		}
++	}
++}
++
+ #----------------------------------------------------------------
+ # main ...
+ #
+@@ -841,5 +887,10 @@
+ 
+ SeqOn preinit
+ 
++yhInitPorts
++
++#yhSeqProcessEvents yhEventCallback
++yhSeqRegisterEvents yhEventCallback
++
+ tkwait window  .
+ exit 0
+Index: vkeybd/vkb.c
+===================================================================
+--- vkeybd.orig/vkb.c	2014-04-25 00:48:09.796101223 +0800
++++ vkeybd/vkb.c	2014-04-25 00:48:09.788101223 +0800
+@@ -291,6 +291,28 @@
+ 	return TCL_OK;
+ }
+ 
++static int yhseq_new_port(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]){
++	if (argc > 1)
++		return TCL_ERROR;
++	new_port(interp,private);
++	return TCL_OK;
++}
++static int yhseq_process_events(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]){
++	if (argc != 2)
++		return TCL_ERROR;
++	process_events(interp,private,argv[1]);
++	return TCL_OK;
++}
++static int yhseq_register_events(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]){
++	if (argc != 2)
++		return TCL_ERROR;
++	register_events(interp,private,argv[1]);
++	return TCL_OK;
++}
++static int yh_debug_out(ClientData clientData, Tcl_Interp *interp, int argc, const char *argv[]){
++	printf("%s\n",argv[1]);
++	return TCL_OK;
++}
+ 
+ /*
+  * Misc. functions
+@@ -353,6 +375,15 @@
+ 			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
+ 	Tcl_CreateCommand(interp, "SeqReverbMode", seq_reverb_mode,
+ 			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
++  	Tcl_CreateCommand(interp, "yhSeqNewPort", yhseq_new_port,
++			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
++	Tcl_CreateCommand(interp, "yhSeqProcessEvents", yhseq_process_events,
++			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
++	Tcl_CreateCommand(interp, "yhSeqRegisterEvents",yhseq_register_events,
++			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
++	Tcl_CreateCommand(interp, "yhdebugout", yh_debug_out,
++			  (ClientData)NULL, (Tcl_CmdDeleteProc*)NULL);
++
+ 
+ 	for (i = 0; i < vkb_num_devices; i++) {
+ 		vkb_optarg_t *p;
+Index: vkeybd/oper_alsa.c
+===================================================================
+--- vkeybd.orig/oper_alsa.c	2014-04-25 00:48:09.796101223 +0800
++++ vkeybd/oper_alsa.c	2014-04-25 01:01:43.964064924 +0800
+@@ -36,7 +36,7 @@
+ #if SND_LIB_MAJOR > 0 || SND_LIB_MINOR >= 6
+ #define snd_seq_flush_output(x) snd_seq_drain_output(x)
+ #define snd_seq_set_client_group(x,name) /*nop*/
+-#define my_snd_seq_open(seqp) snd_seq_open(seqp, "hw", SND_SEQ_OPEN_OUTPUT, 0)
++#define my_snd_seq_open(seqp) snd_seq_open(seqp, "hw", SND_SEQ_OPEN_DUPLEX, 0)
+ #else
+ /* SND_SEQ_OPEN_OUT causes oops on early version of ALSA */
+ #define my_snd_seq_open(seqp) snd_seq_open(seqp, SND_SEQ_OPEN)
+@@ -100,6 +100,10 @@
+ static int seq_client, seq_port;
+ static int chan_no;
+ 
++//yh added
++static int port_count = 1;
++static int ports[256];
++
+ #ifdef HAVE_LASH	
+ static lash_client_t * lash_client = NULL;
+ #endif
+@@ -110,6 +114,59 @@
+ 
+ #define ADDR_DELIM	".:"
+ 
++//yh added
++void new_port(Tcl_Interp *ip, void *private){
++	char tmp[128];
++	sprintf(tmp, "input%d",port_count);
++	ports[port_count++]=snd_seq_create_simple_port(seq_handle,tmp,
++	     SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE,
++	     SND_SEQ_PORT_TYPE_MIDI_GENERIC |
++	     SND_SEQ_PORT_TYPE_APPLICATION);
++}
++void process_events(Tcl_Interp *ip, void *private, const char* exec){
++	static snd_seq_event_t *ev;
++	int t;
++	do {
++		snd_seq_event_input(seq_handle, &ev);
++		if ((t= ev->type == SND_SEQ_EVENT_NOTEOFF))
++			ev->data.note.velocity=0;
++		if (t || ev->type == SND_SEQ_EVENT_NOTEON){
++			char tmp[128];
++			sprintf(tmp, "%s %d %d %d %d %d",exec,ev->dest.port,
++				ev->source.client,ev->source.port,
++				ev->data.note.note,ev->data.note.velocity);
++			Tcl_Eval(ip,tmp);
++		}
++		else
++			printf("message ignored: %d\n",ev->type);
++	} while (snd_seq_event_input_pending(seq_handle,0) > 0);
++}
++typedef struct {
++	Tcl_Interp *ip;
++	char *exec;
++} process_events_data;
++
++void process_events_2(ClientData clientData,int flags){
++	process_events_data *a=(process_events_data*)clientData;
++	process_events(a->ip,NULL,a->exec);
++}
++
++void register_events(Tcl_Interp *ip, void *private, const char* exec){
++	int npfd,i;
++	struct pollfd *pfd;
++	process_events_data* params;
++	npfd = snd_seq_poll_descriptors_count(seq_handle, POLLIN);
++	pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
++	snd_seq_poll_descriptors(seq_handle, pfd, npfd, POLLIN);
++	params=(process_events_data*)ckalloc(sizeof(process_events_data));
++	params->ip=ip;
++	params->exec=(char*)ckalloc(strlen(exec)+1);
++	strcpy(params->exec,exec);
++	for(i=0;i<npfd;i++)
++		Tcl_CreateFileHandler(pfd[i].fd,TCL_READABLE,process_events_2,(ClientData)params);
++}
++
++
+ static int parse_addr(const char *arg, int *client, int *port)
+ {
+ 	char *p;
+@@ -184,7 +241,7 @@
+ 	snd_seq_set_client_group(seq_handle, "input");
+ 
+ 	/* create port */
+-	caps = SND_SEQ_PORT_CAP_READ;
++	caps = SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE;
+ 	if (seq_client == SND_SEQ_ADDRESS_SUBSCRIBERS)
+ 		caps |= SND_SEQ_PORT_CAP_SUBS_READ;
+ 	if ((var = Tcl_GetVar2(ip, "optvar", "name", TCL_GLOBAL_ONLY)) != NULL)
+@@ -199,6 +256,7 @@
+ 		snd_seq_close(seq_handle);
+ 		return 0;
+ 	}
++	ports[0]=my_port;
+ 
+ 	if (seq_client != SND_SEQ_ADDRESS_SUBSCRIBERS) {
+ 		/* subscribe to MIDI port */
